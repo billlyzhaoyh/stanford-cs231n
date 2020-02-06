@@ -142,8 +142,28 @@ class CaptioningRNN(object):
         ############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        #1 (N,H)
+        h0=features.dot(W_proj)+b_proj 
+        #2 (N,T,W)
+        x,embed_cache=word_embedding_forward(captions_in,W_embed)
+        #3 (N,T,H)
+        if self.cell_type=='rnn':
+            h, cache=rnn_forward(x, h0, Wx, Wh, b)
+        #4
+        scores,scores_cache=temporal_affine_forward(h, W_vocab, b_vocab)
+        #5
 
+        loss,dscores=temporal_softmax_loss(scores,captions_out,mask)
+
+        dh,grads['W_vocab'], grads['b_vocab']=temporal_affine_backward(dscores,scores_cache)
+
+        if self.cell_type=='rnn':
+            dx, dh0, grads['Wx'], grads['Wh'], grads['b']=rnn_backward(dh, cache)
+
+        grads['W_embed']=word_embedding_backward(dx, embed_cache)
+
+        grads['W_proj']=features.T.dot(dh0)
+        grads['b_proj']=np.sum(dh0,axis=0)
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################
         #                             END OF YOUR CODE                             #
@@ -211,7 +231,19 @@ class CaptioningRNN(object):
         ###########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        h0=features.dot(W_proj)+b_proj
+        prev_h=h0
+        initial_word=np.zeros((N,W_embed.shape[1]))
+        next_word=initial_word+W_embed[self._start]
+        for i in range(max_length):
+            if self.cell_type=='rnn':
+                next_h, cache=rnn_step_forward(next_word, prev_h, Wx, Wh, b)
+                #next_h (N, H) W_vocab (H,V) b_vocab (V,)
+                scores=next_h.dot(W_vocab)+b_vocab[np.newaxis,:]
+                highest_scores=np.argmax(scores,axis=1)
+                captions[:,i]=highest_scores
+                next_word=W_embed[highest_scores,:]
+                prev_h=next_h
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################
