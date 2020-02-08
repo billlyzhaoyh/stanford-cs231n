@@ -132,7 +132,7 @@ class CaptioningRNN(object):
         # (5) Use (temporal) softmax to compute loss using captions_out, ignoring  #
         #     the points where the output word is <NULL> using the mask above.     #
         #                                                                          #
-        # In the backward pass you will need to compute the gradient of the loss   #
+        # In the backward pass you will nee  d to compute the gradient of the loss   #
         # with respect to all model parameters. Use the loss and grads variables   #
         # defined above to store loss and gradients; grads[k] should give the      #
         # gradients for self.params[k].                                            #
@@ -149,6 +149,8 @@ class CaptioningRNN(object):
         #3 (N,T,H)
         if self.cell_type=='rnn':
             h, cache=rnn_forward(x, h0, Wx, Wh, b)
+        elif self.cell_type=='lstm':
+            h, cache=lstm_forward(x, h0, Wx, Wh, b)
         #4
         scores,scores_cache=temporal_affine_forward(h, W_vocab, b_vocab)
         #5
@@ -159,6 +161,8 @@ class CaptioningRNN(object):
 
         if self.cell_type=='rnn':
             dx, dh0, grads['Wx'], grads['Wh'], grads['b']=rnn_backward(dh, cache)
+        elif self.cell_type=='lstm':
+            dx, dh0, grads['Wx'], grads['Wh'], grads['b']=lstm_backward(dh, cache)
 
         grads['W_embed']=word_embedding_backward(dx, embed_cache)
 
@@ -233,17 +237,22 @@ class CaptioningRNN(object):
 
         h0=features.dot(W_proj)+b_proj
         prev_h=h0
+        prev_c=np.zeros_like(prev_h)
         initial_word=np.zeros((N,W_embed.shape[1]))
         next_word=initial_word+W_embed[self._start]
         for i in range(max_length):
             if self.cell_type=='rnn':
                 next_h, cache=rnn_step_forward(next_word, prev_h, Wx, Wh, b)
-                #next_h (N, H) W_vocab (H,V) b_vocab (V,)
-                scores=next_h.dot(W_vocab)+b_vocab[np.newaxis,:]
-                highest_scores=np.argmax(scores,axis=1)
-                captions[:,i]=highest_scores
-                next_word=W_embed[highest_scores,:]
-                prev_h=next_h
+            elif self.cell_type=='lstm':
+                next_h, next_c, cache=lstm_step_forward(next_word, prev_h, prev_c, Wx, Wh, b)
+                prev_c=next_c
+            #next_h (N, H) W_vocab (H,V) b_vocab (V,)
+            scores=next_h.dot(W_vocab)+b_vocab[np.newaxis,:]
+            highest_scores=np.argmax(scores,axis=1)
+            captions[:,i]=highest_scores
+            next_word=W_embed[highest_scores,:]
+            prev_h=next_h
+
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################
