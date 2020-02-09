@@ -8,7 +8,7 @@ Find course notes and assignments [here](http://cs231n.github.io) and be sure to
 Assignments using Tensorflow are completed, those using Pytorch will be implemented in the future.
 
 ### Assignment 1:
-- [Q1](https://github.com/billlyzhao/stanford-cs231n/tree/master/cs231n/assignment1/knn.ipynb): k-Nearest Neighbor classifier. (_Done_)
+- [Q1](https://github.com/billlyzhaoyh/stanford-cs231n/blob/master/cs231n/assignment1/knn.ipynb): k-Nearest Neighbor classifier. (_Done_)
 - [Q2](https://github.com/billlyzhao/stanford-cs231n/tree/master/cs231n/assignment1/svm.ipynb): Training a Support Vector Machine. (_Done_)
 - [Q3](https://github.com/billlyzhao/stanford-cs231n/tree/master/cs231n/assignment1/softmax.ipynb): Implement a Softmax classifier. (_Done_)
 - [Q4](https://github.com/billlyzhao/stanford-cs231n/tree/master/cs231n/assignment1/two_layer_net.ipynb): Two-Layer Neural Network. (_Done_)
