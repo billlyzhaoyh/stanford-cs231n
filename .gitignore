@@ -14,3 +14,13 @@ cs231n/assignment3/cs231n/datasets/imagenet_val_25.npz
 cs231n/assignment3/cs231n/datasets/imagenet_val_25.npz.1
 cs231n/assignment3/cs231n/datasets/squeezenet.ckpt.data-00000-of-00001
 cs231n/assignment3/cs231n/datasets/squeezenet.ckpt.index
+cs231n/assignment3/cs231n/datasets/MNIST_data/MNIST/processed/test.pt
+cs231n/assignment3/cs231n/datasets/MNIST_data/MNIST/processed/training.pt
+cs231n/assignment3/cs231n/datasets/MNIST_data/MNIST/raw/t10k-images-idx3-ubyte
+cs231n/assignment3/cs231n/datasets/MNIST_data/MNIST/raw/t10k-images-idx3-ubyte.gz
+cs231n/assignment3/cs231n/datasets/MNIST_data/MNIST/raw/t10k-labels-idx1-ubyte
+cs231n/assignment3/cs231n/datasets/MNIST_data/MNIST/raw/t10k-labels-idx1-ubyte.gz
+cs231n/assignment3/cs231n/datasets/MNIST_data/MNIST/raw/train-images-idx3-ubyte
+cs231n/assignment3/cs231n/datasets/MNIST_data/MNIST/raw/train-images-idx3-ubyte.gz
+cs231n/assignment3/cs231n/datasets/MNIST_data/MNIST/raw/train-labels-idx1-ubyte
+cs231n/assignment3/cs231n/datasets/MNIST_data/MNIST/raw/train-labels-idx1-ubyte.gz
